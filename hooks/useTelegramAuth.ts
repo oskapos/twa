@@ -47,7 +47,9 @@ export function useTelegramAuth() {
       // Handle successful authentication
       if (data.data?.token) {
         console.log('loggedin');
-        localStorage.setItem('user_token', data.data.token);
+       if (typeof window !== 'undefined' && window.localStorage) {
+         localStorage.setItem('user_token', data.data.accessToken);
+       }
         push('/home');
       }
     },

@@ -27,14 +27,14 @@ export default function Home() {
     error,
   } = useQuery({
     queryKey: ['gameValue'],
-    queryFn: fetchUserData(localStorage.getItem('user_token') || process.env.NEXT_PUBLIC_AUTH_TOKEN || '', onQuerySuccess),
+    queryFn: fetchUserData((typeof window !== 'undefined' && window.localStorage && localStorage.getItem('user_token')) || process.env.NEXT_PUBLIC_AUTH_TOKEN || '', onQuerySuccess),
   });
   function onQuerySuccess(data: number) {
     setClientTaps(data);
   }
 
   const syncTapsMutation = useMutation<any, Error, number, { previousValue: number }>({
-    mutationFn: syncTaps(localStorage.getItem('user_token') || process.env.NEXT_PUBLIC_AUTH_TOKEN || ''),
+    mutationFn: syncTaps((typeof window !== 'undefined' && window.localStorage && localStorage.getItem('user_token')) || process.env.NEXT_PUBLIC_AUTH_TOKEN || ''),
   });
 
   const [debouncedSyncTimeout, setDebouncedSyncTimeout] = useState<NodeJS.Timeout | null>(null);

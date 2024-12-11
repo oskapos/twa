@@ -15,7 +15,7 @@ export default function Tasks() {
     error,
   } = useQuery({
     queryKey: ['tasks'],
-    queryFn: fetchTasks(localStorage.getItem('user_token') || process.env.NEXT_PUBLIC_AUTH_TOKEN || ''),
+    queryFn: fetchTasks((typeof window !== 'undefined' && window.localStorage && localStorage.getItem('user_token')) || process.env.NEXT_PUBLIC_AUTH_TOKEN || ''),
   });
 
   if (isLoading) {
