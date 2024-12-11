@@ -27,7 +27,7 @@ export default function Home() {
     error,
   } = useQuery({
     queryKey: ['gameValue'],
-    queryFn: fetchUserData('', onQuerySuccess),
+    queryFn: fetchUserData(onQuerySuccess),
   });
   function onQuerySuccess(data: number) {
     setClientTaps(data);

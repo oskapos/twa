@@ -1,6 +1,6 @@
 import { ApiRequestConfig, ApiResponse, MemeType, TaskType, UserDataType } from '@/types';
 
-const globalFetch = async <TReq, TRes>(config: ApiRequestConfig<TReq>, authToken?: string): Promise<ApiResponse<TRes>> => {
+const globalFetch = async <TReq, TRes>(config: ApiRequestConfig<TReq>): Promise<ApiResponse<TRes>> => {
   const { method, url, body, headers, searchParams, nextConfig, cacheConfig } = config;
 
   if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
@@ -17,12 +17,12 @@ const globalFetch = async <TReq, TRes>(config: ApiRequestConfig<TReq>, authToken
     method,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: authToken ? `Bearer ${authToken}` : '',
       ...headers,
     },
     body: body && method !== 'GET' ? JSON.stringify(body) : undefined,
     cache: cacheConfig,
     next: nextConfig,
+    credentials: 'include', // Include cookies in requests
   });
 
   if (!response.ok) {
@@ -42,16 +42,13 @@ const globalFetch = async <TReq, TRes>(config: ApiRequestConfig<TReq>, authToken
 
 export default globalFetch;
 
-export const fetchUserData = (authToken: string, onSuccess?: (data: number) => void) => {
+export const fetchUserData = (onSuccess?: (data: number) => void) => {
   return async () => {
-    const response = await globalFetch<null, UserDataType>(
-      {
-        method: 'GET',
-        url: '/user',
-        cacheConfig: 'no-store',
-      },
-      authToken
-    );
+    const response = await globalFetch<null, UserDataType>({
+      method: 'GET',
+      url: '/user',
+      cacheConfig: 'no-store',
+    });
     if (response.success && onSuccess) {
       onSuccess(response?.data?.user?.points);
     }
@@ -59,30 +56,24 @@ export const fetchUserData = (authToken: string, onSuccess?: (data: number) => v
   };
 };
 
-export const syncTaps = (authToken?: string) => {
+export const syncTaps = () => {
   return async (taps: number) => {
-    const response = await globalFetch(
-      {
-        method: 'POST',
-        url: '/user/tap',
-        body: { taps },
-      },
-      authToken
-    );
+    const response = await globalFetch({
+      method: 'POST',
+      url: '/user/tap',
+      body: { taps },
+    });
     return response.data;
   };
 };
 
-export const fetchTasks = (authToken?: string, onSuccess?: (data: any) => void) => {
+export const fetchTasks = (onSuccess?: (data: any) => void) => {
   return async () => {
-    const response = await globalFetch<null, { tasks: Array<TaskType> }>(
-      {
-        method: 'GET',
-        url: '/tasks',
-        cacheConfig: 'no-store',
-      },
-      authToken
-    );
+    const response = await globalFetch<null, { tasks: Array<TaskType> }>({
+      method: 'GET',
+      url: '/tasks',
+      cacheConfig: 'no-store',
+    });
     if (response.success && onSuccess) {
       onSuccess(response?.data);
     }
@@ -90,16 +81,13 @@ export const fetchTasks = (authToken?: string, onSuccess?: (data: any) => void) 
   };
 };
 
-export const fetchMemes = (authToken?: string, onSuccess?: (data: any) => void) => {
+export const fetchMemes = (onSuccess?: (data: any) => void) => {
   return async () => {
-    const response = await globalFetch<null, { tokens: Array<MemeType> }>(
-      {
-        method: 'GET',
-        url: '/tokens',
-        cacheConfig: 'no-store',
-      },
-      authToken
-    );
+    const response = await globalFetch<null, { tokens: Array<MemeType> }>({
+      method: 'GET',
+      url: '/tokens',
+      cacheConfig: 'no-store',
+    });
     if (response.success && onSuccess) {
       onSuccess(response?.data);
     }
