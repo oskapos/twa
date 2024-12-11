@@ -29,7 +29,7 @@ export default function Memes() {
     error,
   } = useQuery({
     queryKey: ['tasks'],
-    queryFn: fetchMemes((typeof window !== 'undefined' && window.localStorage && localStorage.getItem('user_token')) || process.env.NEXT_PUBLIC_AUTH_TOKEN || ''),
+    queryFn: fetchMemes(),
   });
 
   if (isLoading) {

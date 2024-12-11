@@ -59,7 +59,7 @@ export const fetchUserData = (authToken: string, onSuccess?: (data: number) => v
   };
 };
 
-export const syncTaps = (authToken: string) => {
+export const syncTaps = (authToken?: string) => {
   return async (taps: number) => {
     const response = await globalFetch(
       {
@@ -73,7 +73,7 @@ export const syncTaps = (authToken: string) => {
   };
 };
 
-export const fetchTasks = (authToken: string, onSuccess?: (data: any) => void) => {
+export const fetchTasks = (authToken?: string, onSuccess?: (data: any) => void) => {
   return async () => {
     const response = await globalFetch<null, { tasks: Array<TaskType> }>(
       {
@@ -90,7 +90,7 @@ export const fetchTasks = (authToken: string, onSuccess?: (data: any) => void) =
   };
 };
 
-export const fetchMemes = (authToken: string, onSuccess?: (data: any) => void) => {
+export const fetchMemes = (authToken?: string, onSuccess?: (data: any) => void) => {
   return async () => {
     const response = await globalFetch<null, { tokens: Array<MemeType> }>(
       {

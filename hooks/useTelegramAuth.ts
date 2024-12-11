@@ -1,6 +1,4 @@
-// app/hooks/useTelegramAuth.ts
 'use client';
-
 import globalFetch from '@/lib/api';
 import { ApiResponse } from '@/types';
 import { useMutation } from '@tanstack/react-query';
@@ -43,14 +41,24 @@ export function useTelegramAuth() {
         },
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       // Handle successful authentication
-      if (data.data?.token) {
+      if (data.data?.accessToken) {
         console.log('loggedin');
-       if (typeof window !== 'undefined' && window.localStorage) {
-         localStorage.setItem('user_token', data.data.accessToken);
-       }
-        push('/home');
+        // Set auth token
+        const tokenResponse = await fetch('/api/auth/set-token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token: data.data.accessToken }),
+        });
+
+        if (tokenResponse.ok) {
+          push('/');
+        } else {
+          throw new Error('Failed to set authentication token');
+        }
       }
     },
   });

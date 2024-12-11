@@ -42,8 +42,8 @@ export default function Onboarding() {
   const [currentScreen, setCurrentScreen] = useState(0);
   const { mutate: login, isLoading, error } = useTelegramAuth();
 
-  const handleTelegramLogin = () => {
-    // Ensure Telegram Web App is initialized
+const handleTelegramLogin = () => {
+  if (typeof window !== 'undefined' && WebApp) {
     WebApp.ready();
     const telegramUser = WebApp.initDataUnsafe;
     console.log(telegramUser);
@@ -53,7 +53,10 @@ export default function Onboarding() {
         telegramToken: WebApp.initData,
       });
     }
-  };
+  } else {
+    console.error('Telegram WebApp not available');
+  }
+};
 
   const handleNextScreen = () => {
     if (currentScreen < ONBOARDING_SCREENS.length - 1) {
