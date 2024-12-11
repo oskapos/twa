@@ -2,7 +2,7 @@
 import { Info } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
-import FlamePic from '@/public/Flame.png';
+import FlamePic from '@/public/flame.png';
 import Chevron from '@/public/chev-green.svg';
 import { MemeType } from '@/types';
 
