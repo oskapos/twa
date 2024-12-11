@@ -54,6 +54,7 @@ export function useTelegramAuth() {
         });
 
         if (tokenResponse.status === 200) {
+          console.log('PUSH');
           push('/home');
         } else {
           throw new Error('Failed to set authentication token');
