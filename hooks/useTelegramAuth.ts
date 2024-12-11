@@ -44,7 +44,6 @@ export function useTelegramAuth() {
     onSuccess: async (data) => {
       // Handle successful authentication
       if (data.data?.accessToken) {
-        console.log('loggedin');
         // Set auth token
         const tokenResponse = await fetch('/api/auth/set-token', {
           method: 'POST',
@@ -54,9 +53,8 @@ export function useTelegramAuth() {
           body: JSON.stringify({ token: data.data.accessToken }),
         });
 
-        if (tokenResponse.ok) {
+        if (tokenResponse.status === 200) {
           push('/home');
-          alert('Successfully logged in!');
         } else {
           throw new Error('Failed to set authentication token');
         }
